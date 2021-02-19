@@ -1,0 +1,32 @@
+
+version: '3.7'
+
+x-python: &python
+  volumes:
+    - .:/src
+  ports:
+    - "8000:8000"
+  environment: 
+    MYSQL_HOST: 'mysql'
+    MYSQL_USER: 'root'
+    MYSQL_DATABASE: &mysql-database 'test'
+    MYSQL_PASSWORD: &mysql-password 'root'
+
+services:
+  python:
+    image: python:3.8
+    working_dir: '/src/demo/'
+    build: .
+    <<: *python
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: *mysql-database
+      MYSQL_ROOT_PASSWORD: *mysql-password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_datadir:/var/lib/mysql
+volumes:
+  mysql_datadir:
+  elasticsearch_datadir:
